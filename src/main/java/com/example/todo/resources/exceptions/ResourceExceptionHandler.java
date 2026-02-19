@@ -1,4 +1,4 @@
-package com.example.todo.exceptions;
+package com.example.todo.resources.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
-	
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException onfe, HttpServletRequest hsr) {
 		StandardError se = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Object not found", onfe.getMessage(), hsr.getRequestURI());

@@ -1,4 +1,4 @@
-package com.example.todo.exceptions;
+package com.example.todo.resources.exceptions;
 
 import java.io.Serializable;
 

@@ -31,4 +31,11 @@ public class TaskResource {
 		
 		return ResponseEntity.ok().body(task);
 	}
+	
+	@GetMapping("/title/{title}")
+	public ResponseEntity<List<Task>> findByTitle(@PathVariable String title) {
+		List<Task> tasks = taskService.findByTitle(title);
+		
+		return ResponseEntity.ok().body(tasks);
+	}
 }

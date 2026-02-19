@@ -15,6 +15,10 @@ public class TaskService {
 	@Autowired
 	private TaskRepository taskRepository;
 	
+	public Task insert(Task task) {
+		return taskRepository.save(task);
+	}
+	
 	public List<Task> findAll() {	
 		return taskRepository.findAll();
 	}
@@ -23,5 +27,9 @@ public class TaskService {
 		Optional<Task> task = taskRepository.findById(id);
 		
 		return task.orElseThrow(() -> new ObjectNotFoundException("Object not found! Id: " + id));
+	}
+	
+	public List<Task> findByTitle(String title) {
+		return taskRepository.findByTitleContainingIgnoreCase(title);
 	}
 }
