@@ -19,6 +19,10 @@ public class TaskService {
 		return taskRepository.save(task);
 	}
 	
+	public void delete(String id) {
+		taskRepository.deleteById(id);
+	}
+	
 	public List<Task> findAll() {	
 		return taskRepository.findAll();
 	}
