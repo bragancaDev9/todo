@@ -36,4 +36,16 @@ public class TaskService {
 	public List<Task> findByTitle(String title) {
 		return taskRepository.findByTitleContainingIgnoreCase(title);
 	}
+	
+	public Task update(Task task) {
+		Task newTask = taskRepository.findById(task.getId())
+			.orElseThrow(() -> new ObjectNotFoundException("Object can't be found! Id: " + task.getId()));	
+		updateData(newTask, task);
+		return taskRepository.save(newTask);
+	}
+	
+	private void updateData(Task newTask, Task task) {
+		newTask.setTitle(task.getTitle());
+		newTask.setDescription(task.getDescription());
+	}
 }
