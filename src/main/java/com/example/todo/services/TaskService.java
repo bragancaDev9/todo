@@ -15,14 +15,12 @@ public class TaskService {
 	@Autowired
 	private TaskRepository taskRepository;
 	
+	// Create
 	public Task insert(Task task) {
 		return taskRepository.save(task);
 	}
 	
-	public void delete(String id) {
-		taskRepository.deleteById(id);
-	}
-	
+	// Read
 	public List<Task> findAll() {	
 		return taskRepository.findAll();
 	}
@@ -37,6 +35,11 @@ public class TaskService {
 		return taskRepository.findByTitleContainingIgnoreCase(title);
 	}
 	
+	public List<Task> findByDescription(String description) {
+		return taskRepository.findByDescriptionContainingIgnoreCase(description);
+	}
+	
+	// Update
 	public Task update(Task task) {
 		Task newTask = taskRepository.findById(task.getId())
 			.orElseThrow(() -> new ObjectNotFoundException("Object can't be found! Id: " + task.getId()));	
@@ -47,5 +50,11 @@ public class TaskService {
 	private void updateData(Task newTask, Task task) {
 		newTask.setTitle(task.getTitle());
 		newTask.setDescription(task.getDescription());
+	}
+	
+	// Delete
+	public void delete(String id) {
+		findById(id);
+		taskRepository.deleteById(id);
 	}
 }

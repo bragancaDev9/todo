@@ -1,5 +1,6 @@
 package com.example.todo.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.todo.entities.Task;
 import com.example.todo.services.TaskService;
@@ -21,6 +24,15 @@ public class TaskResource {
 	@Autowired
 	private TaskService taskService;
 	
+	// Create
+	@PostMapping
+	public ResponseEntity<Task> insert(@RequestBody Task task) {
+		Task newTask = taskService.insert(task);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newTask.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+	
+	// Read
 	@GetMapping
 	public ResponseEntity<List<Task>> findAll() {
 		List<Task> tasks = taskService.findAll();
@@ -42,17 +54,26 @@ public class TaskResource {
 		return ResponseEntity.ok().body(tasks);
 	}
 	
-	@PostMapping
-	public ResponseEntity<Task> insert(@RequestBody Task task) {
-		Task newTask = taskService.insert(task);
+	@GetMapping("/description/{description}")
+	public ResponseEntity<List<Task>> findByDescription(@PathVariable String description) {
+		List<Task> tasks = taskService.findByDescription(description);
 		
-		return ResponseEntity.ok().body(newTask);
+		return ResponseEntity.ok().body(tasks);
 	}
 	
+	// Update
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> update(@RequestBody Task task, @PathVariable String id) {
+		task.setId(id);
+		task = taskService.update(task);
+		return ResponseEntity.noContent().build();
+	}
+	
+	// Delete
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		taskService.delete(id);
 		
-		return ResponseEntity.ok().body(null);
+		return ResponseEntity.noContent().build();
 	}
 }
